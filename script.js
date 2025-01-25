@@ -1,24 +1,30 @@
 const sheetId = '1FE3h7OaeX7eZtTEE5-8uQe3yFNaKtHsN-itlOUUa5FA';
-const sheetName = 'WNRS';  // Your sheet name
+const sheetName = 'WNRS'; // Change this if sheet names represent individual decks
 const apiKey = 'AIzaSyC8tdrYfi3zAu6A5cLrUd3xNUG4jxTdcn0';
+
+// Global Variables
+let decks = {};
+let currentDeck = {};
+let currentMode = '';
+let players = [];
+let turnIndex = 0;
 
 async function fetchDecks() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A:C?key=${apiKey}`;
     try {
         const response = await fetch(url);
         const data = await response.json();
-        const rows = data.values.slice(1); // Skip header row
+        const rows = data.values.slice(1);
 
-        let deckMap = {};
         rows.forEach(row => {
-            const [deckName, cardLevel, question] = row;
-            if (!deckMap[deckName]) {
-                deckMap[deckName] = { "1": [], "2": [], "3": [] };
+            const [cardLevel, question] = row;
+            if (!decks[cardLevel]) {
+                decks[cardLevel] = [];
             }
-            deckMap[deckName][cardLevel].push(question);
+            decks[cardLevel].push(question);
         });
 
-        return deckMap;
+        return decks;
     } catch (error) {
         console.error('Error fetching data:', error);
     }
@@ -28,49 +34,24 @@ async function startGame() {
     document.getElementById('intro').style.display = 'none';
     document.getElementById('game-container').style.display = 'block';
 
-    const decks = await fetchDecks();
+    await fetchDecks();
     const deckSelect = document.getElementById('deck-select');
-    deckSelect.innerHTML = '';
-
-    for (let deck in decks) {
-        let option = document.createElement('option');
+    Object.keys(decks).forEach(deck => {
+        const option = document.createElement('option');
         option.value = deck;
-        option.textContent = deck;
+        option.textContent = `Deck ${deck}`;
         deckSelect.appendChild(option);
-    }
-}
-
-// Global Variables
-let currentDeck = {};
-let turnIndex = 0;
-let players = [];
-
-async function displayCard(deck, level = null, random = false) {
-    const decks = await fetchDecks();
-    currentDeck = decks[deck];
-    let questions = [];
-
-    if (level) {
-        questions = currentDeck[level];
-    } else {
-        for (let lvl in currentDeck) {
-            questions = questions.concat(currentDeck[lvl]);
-        }
-    }
-
-    let question = questions[random ? Math.floor(Math.random() * questions.length) : 0];
-    document.getElementById('card-level').textContent = `Level ${level || 'Random'}`;
-    document.getElementById('card-question').textContent = question;
+    });
 }
 
 function setupPlayers() {
     const playerCount = document.getElementById('player-count').value;
-    let playerContainer = document.getElementById('player-names');
+    const playerContainer = document.getElementById('player-names');
     playerContainer.innerHTML = '';
     players = [];
 
     for (let i = 0; i < playerCount; i++) {
-        let input = document.createElement('input');
+        const input = document.createElement('input');
         input.type = 'text';
         input.placeholder = `Player ${i + 1}`;
         input.onchange = () => players[i] = input.value;
@@ -78,14 +59,30 @@ function setupPlayers() {
     }
 }
 
-function nextTurn() {
-    if (players.length === 0) {
-        alert('Please enter player names.');
+function confirmGameStart() {
+    if (!players.length || !players.every(name => name.trim())) {
+        alert('Please enter all player names.');
         return;
     }
+    const selectedDeck = document.getElementById('deck-select').value;
+    currentMode = document.querySelector('button.active')?.id || 'Traditional Mode';
+    alert(`Starting game with Deck: ${selectedDeck}, Mode: ${currentMode}`);
+    displayCard(selectedDeck, "1");
+}
+
+async function displayCard(deck, level = null, random = false) {
+    const questions = level ? decks[level] : Object.values(decks).flat();
+    const question = random
+        ? questions[Math.floor(Math.random() * questions.length)]
+        : questions.shift();
+
+    document.getElementById('card-level').textContent = `Level ${level || 'Random'}`;
+    document.getElementById('card-question').textContent = question || 'No questions left in this deck.';
+}
+
+function nextTurn() {
     turnIndex = (turnIndex + 1) % players.length;
-    document.getElementById('turn-order').textContent = `Current turn: ${players[turnIndex]}`;
-    displayCard(document.getElementById('deck-select').value);
+    document.getElementById('turn-order').textContent = `It's ${players[turnIndex]}'s turn!`;
 }
 
 function confirmEndGame() {
@@ -93,7 +90,7 @@ function confirmEndGame() {
 }
 
 function endGame() {
-    alert('Game Over');
+    alert('Thank you for playing!');
     location.reload();
 }
 
@@ -101,19 +98,14 @@ function cancelEndGame() {
     document.getElementById('end-game-popup').style.display = 'none';
 }
 
-// Game Modes
 function playTraditional() {
-    const selectedDeck = document.getElementById('deck-select').value;
-    displayCard(selectedDeck, "1");
+    currentMode = 'Traditional';
+    displayCard(document.getElementById('deck-select').value, "1");
 }
 
 function playRandom() {
-    const selectedDeck = document.getElementById('deck-select').value;
-    displayCard(selectedDeck, null, true);
+    currentMode = 'Random';
+    displayCard(document.getElementById('deck-select').value, null, true);
 }
 
-function playCustom() {
-    alert("In Custom Mode, players will choose the next card manually.");
-    nextTurn();
-}
 
