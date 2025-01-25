@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WNRS - Gameplay</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="gameplay-container">
+        <!-- Title Box -->
+        <div class="title-box">
+            <h2 id="gameTitle">We Are Not Really Strangers</h2>
+        </div>
+
+        <!-- Turn Order Section -->
+        <div class="turn-order">
+            <h3>Current Turn:</h3>
+            <ul id="turnOrderList">
+                <!-- Player names will be dynamically added here -->
+            </ul>
+        </div>
+
+        <!-- Question Card Section -->
+        <div class="card-container">
+            <div class="card-level" id="cardLevel">Level 1 - Perception</div>
+            <div class="card-question" id="cardQuestion">Sample question will appear here.</div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button id="nextTurnBtn">Completed - Next Turn</button>
+            <button id="endGameBtn">End Game</button>
+        </div>
+
+        <!-- End Game Confirmation Popup -->
+        <div id="endGamePopup" class="popup hidden">
+            <div class="popup-content">
+                <h2>Are You Sure?</h2>
+                <button id="confirmEndGame">Yes</button>
+                <button id="cancelEndGame">No, Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

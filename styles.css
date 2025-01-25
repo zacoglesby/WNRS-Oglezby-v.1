@@ -1,3 +1,4 @@
+/* General Styling */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -16,6 +17,7 @@ body {
     border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 500px;
+    width: 90%;
 }
 
 h1 {
@@ -28,6 +30,7 @@ label {
     margin: 10px 0 5px;
 }
 
+/* Form Elements */
 select, input, button {
     width: 100%;
     padding: 10px;
@@ -35,8 +38,14 @@ select, input, button {
     font-size: 1em;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 
+input:focus, button:focus {
+    outline: 2px solid #3498db;
+}
+
+/* Game Modes Section */
 .game-modes button {
     width: 48%;
     margin-right: 2%;
@@ -95,5 +104,126 @@ select, input, button {
 .hidden {
     display: none;
 }
+
+/* Gameplay Screen Styles */
+.gameplay-container {
+    width: 80%;
+    max-width: 800px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title-box {
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 10px;
+    border: 2px solid #ff5a5f;
+    background-color: #ff5a5f;
+    color: white;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.turn-order {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.turn-order ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.turn-order li {
+    font-size: 1.2em;
+    margin: 5px 0;
+}
+
+.card-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card-level {
+    width: 100%;
+    padding: 20px;
+    background-color: #ff5a5f;
+    color: white;
+    font-size: 1.5em;
+    border-radius: 10px 10px 0 0;
+}
+
+.card-question {
+    width: 100%;
+    padding: 40px;
+    background-color: white;
+    font-size: 1.5em;
+    border: 2px solid #ff5a5f;
+    border-radius: 0 0 10px 10px;
+    color: #333;
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+.controls button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    margin: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#nextTurnBtn {
+    background-color: #2ecc71;
+    color: white;
+}
+
+#endGameBtn {
+    background-color: #e74c3c;
+    color: white;
+}
+
+/* End Game Popup */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .gameplay-container {
+        width: 95%;
+    }
+
+    .controls button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
 
 

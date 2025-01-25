@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WNRS - Main Page</title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>We Are Not Really Strangers - Main Page</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,7 +13,7 @@
 
         <!-- Deck Selection -->
         <label for="deckSelect">Select a Deck:</label>
-        <select id="deckSelect">
+        <select id="deckSelect" required>
             <option value="" disabled selected>Select a deck</option>
             <!-- Options will be loaded dynamically -->
         </select>
@@ -20,13 +21,13 @@
         <!-- Game Mode Selection -->
         <label>Select a Game Mode:</label>
         <div class="game-modes">
-            <button id="traditionalMode">Traditional Mode</button>
-            <button id="randomizedMode">Randomized Mode</button>
+            <button type="button" id="traditionalMode" class="mode-btn">Traditional Mode</button>
+            <button type="button" id="randomizedMode" class="mode-btn">Randomized Mode</button>
         </div>
 
         <!-- Player Count Selection -->
         <label for="playerCount">Select # of Players:</label>
-        <input type="number" id="playerCount" min="2" max="6" placeholder="Enter number (2-6)">
+        <input type="number" id="playerCount" min="2" max="6" placeholder="Enter number (2-6)" required>
         
         <!-- Dynamic Player Name Inputs -->
         <div id="playerInputs"></div>
@@ -48,3 +49,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+

@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Fetch Google Sheets data
+    // Google Sheets data fetch
     const SHEET_ID = '1FE3h7OaeX7eZtTEE5-8uQe3yFNaKtHsN-itlOUUa5FA';
     const API_KEY = 'AIzaSyC8tdrYfi3zAu6A5cLrUd3xNUG4jxTdcn0';
     const selectDeck = document.getElementById('deckSelect');
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const response = await fetch(url);
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                    throw new Error(`Failed to fetch deck list (Status: ${response.status})`);
                 }
 
                 const data = await response.json();
@@ -34,9 +34,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 } else {
                     console.error('No sheets found in the spreadsheet.');
+                    alert('No decks available. Please check the spreadsheet.');
                 }
             } catch (error) {
                 console.error('Error loading decks:', error);
+                alert('Error loading decks. Please check your internet connection or API key.');
             }
         }
         loadDecks();
@@ -44,24 +46,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Handle player input fields
     const playerCountInput = document.getElementById('playerCount');
-    if (playerCountInput) {
+    const playerInputsContainer = document.getElementById('playerInputs');
+
+    if (playerCountInput && playerInputsContainer) {
         playerCountInput.addEventListener('input', function () {
-            let playerCount = parseInt(this.value);
-            let playerInputs = document.getElementById('playerInputs');
-            playerInputs.innerHTML = '';
+            const playerCount = parseInt(this.value);
+            playerInputsContainer.innerHTML = '';
 
             if (playerCount >= 2 && playerCount <= 6) {
                 for (let i = 1; i <= playerCount; i++) {
                     let input = document.createElement('input');
                     input.type = 'text';
                     input.placeholder = `Player ${i} Name`;
-                    playerInputs.appendChild(input);
+                    input.required = true;
+                    input.classList.add('player-name-input');
+                    playerInputsContainer.appendChild(input);
                 }
             }
         });
     }
 
-    // Game mode selection
+    // Game mode selection logic
     let selectedMode = '';
 
     const traditionalModeBtn = document.getElementById('traditionalMode');
@@ -82,7 +87,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Start Game button logic
     const startGameBtn = document.getElementById('startGameBtn');
-    if (startGameBtn) {
+    const confirmationPopup = document.getElementById('confirmationPopup');
+    const confirmDetails = document.getElementById('confirmDetails');
+
+    if (startGameBtn && confirmationPopup && confirmDetails) {
         startGameBtn.addEventListener('click', function () {
             const deckChoice = selectDeck.value;
             const playerInputs = document.querySelectorAll('#playerInputs input');
@@ -99,27 +107,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            document.getElementById('confirmationPopup').classList.remove('hidden');
-            document.getElementById('confirmDetails').innerHTML = `
+            confirmationPopup.classList.remove('hidden');
+            confirmDetails.innerHTML = `
                 <strong>Deck:</strong> ${deckChoice} <br>
                 <strong>Mode:</strong> ${selectedMode} <br>
                 <strong>Players:</strong> ${playerNames.join(', ')}
             `;
+
+            document.getElementById('confirmStart').addEventListener('click', function () {
+                const queryString = `gameplay.html?deck=${encodeURIComponent(deckChoice)}&mode=${encodeURIComponent(selectedMode)}&players=${encodeURIComponent(JSON.stringify(playerNames))}`;
+                window.location.href = queryString;
+            });
         });
     }
 
-    // Popup buttons
-    const confirmStartBtn = document.getElementById('confirmStart');
-    if (confirmStartBtn) {
-        confirmStartBtn.addEventListener('click', function () {
-            window.location.href = "gameplay.html";
-        });
-    }
-
+    // Cancel confirmation popup
     const cancelStartBtn = document.getElementById('cancelStart');
     if (cancelStartBtn) {
         cancelStartBtn.addEventListener('click', function () {
-            document.getElementById('confirmationPopup').classList.add('hidden');
+            confirmationPopup.classList.add('hidden');
         });
     }
 });
+
