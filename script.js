@@ -15,17 +15,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (selectDeck) {
         async function loadDecks() {
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/A1:A?key=${API_KEY}`;
-            const response = await fetch(url);
-            const data = await response.json();
-            
-            if (data.values) {
-                data.values.forEach(row => {
-                    let option = document.createElement('option');
-                    option.value = row[0];
-                    option.textContent = row[0];
-                    selectDeck.appendChild(option);
-                });
+            try {
+                // Fetch metadata to get sheet names
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}?key=${API_KEY}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.sheets) {
+                    data.sheets.forEach(sheet => {
+                        let option = document.createElement('option');
+                        option.value = sheet.properties.title;  // Use sheet title as value
+                        option.textContent = sheet.properties.title;  // Display sheet name
+                        selectDeck.appendChild(option);
+                    });
+                } else {
+                    console.error('No sheets found in the spreadsheet.');
+                }
+            } catch (error) {
+                console.error('Error loading decks:', error);
             }
         }
         loadDecks();
