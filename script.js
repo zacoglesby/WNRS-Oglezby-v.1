@@ -16,9 +16,13 @@ document.addEventListener('DOMContentLoaded', function () {
     if (selectDeck) {
         async function loadDecks() {
             try {
-                // Fetch metadata to get sheet names
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}?key=${API_KEY}`;
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}?fields=sheets(properties(title))&key=${API_KEY}`;
                 const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
                 const data = await response.json();
 
                 if (data.sheets) {
