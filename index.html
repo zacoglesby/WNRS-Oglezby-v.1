@@ -4,60 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>We Are Not Really Strangers</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 50px;
-        }
-        #game-container, #end-game-popup { display: none; }
-        button { padding: 15px; margin: 10px; font-size: 18px; cursor: pointer; }
-        .game-title { font-size: 24px; font-weight: bold; margin-bottom: 20px; }
-        .card-container { display: flex; flex-direction: column; align-items: center; }
-        .red-card { background: red; color: white; padding: 20px; font-size: 20px; width: 50%; }
-        .white-card { background: white; color: black; padding: 20px; font-size: 20px; width: 50%; border: 1px solid black; }
-        .turn-order { text-align: left; margin-bottom: 20px; }
-        .popup { background: rgba(0, 0, 0, 0.8); color: white; padding: 20px; border-radius: 10px; }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="intro">
-        <h1>Welcome to We Are Not Really Strangers</h1>
-        <button onclick="startGame()">Click Here To Start</button>
-    </div>
-
-    <div id="game-container">
-        <div class="game-title">We Are Not Really Strangers</div>
-        <label for="deck-select">Select A Deck:</label>
-        <select id="deck-select"></select>
-
-        <h3>Game Modes</h3>
-        <button onclick="playTraditional()">Traditional Mode</button>
-        <button onclick="playRandom()">Randomized Mode</button>
-
-        <h3>How Many Players?</h3>
-        <input type="number" id="player-count" min="2" max="6" placeholder="Enter number of players" onchange="setupPlayers()">
-        <div id="player-names"></div>
-
-        <button id="start-button" onclick="confirmGameStart()">Start Game</button>
-
-        <div id="turn-order"></div>
-        <div class="card-container">
-            <div class="red-card" id="card-level">Question Level</div>
-            <div class="white-card" id="card-question">Question will appear here</div>
-        </div>
-
-        <button onclick="nextTurn()">Completed - Next Turn</button>
-        <button onclick="confirmEndGame()">End Game</button>
-
-        <div id="end-game-popup" class="popup">
-            <p>Are you sure you want to end the game?</p>
-            <button onclick="endGame()">Yes</button>
-            <button onclick="cancelEndGame()">No, Cancel</button>
-        </div>
+    <div class="container">
+        <h1>Welcome to We Are Not Really Strangers!</h1>
+        <p>Please click below to enter</p>
+        <button id="startButton">Click Here to Start</button>
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
+
 
