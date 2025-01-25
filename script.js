@@ -4,40 +4,45 @@ document.addEventListener('DOMContentLoaded', function () {
     const gameMode = urlParams.get('mode');
     const players = JSON.parse(decodeURIComponent(urlParams.get('players')));
 
-    // Set the game title
     document.getElementById('gameTitle').textContent = `We Are Not Really Strangers (${selectedDeck}) - (${gameMode})`;
 
     let currentTurnIndex = 0;
-    let questions = [];
+    let shuffledPlayers = [];
 
-    // Display player names in the turn order list
-    function updateTurnOrder() {
-        const turnOrderList = document.getElementById('turnOrderList');
-        turnOrderList.innerHTML = '';
-
-        players.forEach((player, index) => {
-            const listItem = document.createElement('li');
-            if (index === currentTurnIndex % players.length) {
-                listItem.innerHTML = `→ <strong>${player} (Your Turn)</strong>`;
-            } else {
-                listItem.textContent = player;
-            }
-            turnOrderList.appendChild(listItem);
-        });
+    function shufflePlayers(array) {
+        return array.sort(() => Math.random() - 0.5);
     }
 
-    // Fetch questions from Google Sheets
+    function updateCurrentTurn() {
+        const currentPlayer = shuffledPlayers[currentTurnIndex % shuffledPlayers.length];
+        document.getElementById('currentPlayer').textContent = currentPlayer;
+    }
+
+    function initializeTurnOrder() {
+        shuffledPlayers = shufflePlayers(players);
+        updateCurrentTurn();
+    }
+
+    function nextTurn() {
+        currentTurnIndex++;
+        updateCurrentTurn();
+        showNextQuestion();
+    }
+
     async function loadQuestions() {
         const SHEET_ID = '1FE3h7OaeX7eZtTEE5-8uQe3yFNaKtHsN-itlOUUa5FA';
         const API_KEY = 'AIzaSyC8tdrYfi3zAu6A5cLrUd3xNUG4jxTdcn0';
-        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${selectedDeck}?key=${API_KEY}`;
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values:batchGet?ranges=${selectedDeck}!A2:B&key=${API_KEY}`;
 
         try {
             const response = await fetch(url);
             const data = await response.json();
 
-            if (data.values && data.values.length > 1) {
-                questions = data.values.slice(1).map(row => row[1]); // Get Column B (index 1)
+            if (data.valueRanges && data.valueRanges[0].values.length > 0) {
+                questions = data.valueRanges[0].values.map(row => ({
+                    level: row[0],  
+                    question: row[1]
+                }));
                 showNextQuestion();
             } else {
                 document.getElementById('cardQuestion').textContent = "Error: No questions found.";
@@ -50,18 +55,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showNextQuestion() {
         if (questions.length > 0) {
-            document.getElementById('cardLevel').textContent = `Level ${Math.floor(Math.random() * 3) + 1}`;
-            document.getElementById('cardQuestion').textContent = questions[currentTurnIndex % questions.length];
-            currentTurnIndex++;
-            updateTurnOrder();
+            const currentQuestion = questions[currentTurnIndex % questions.length];
+            document.getElementById('cardLevel').textContent = `Level ${currentQuestion.level}`;
+            document.getElementById('cardQuestion').textContent = currentQuestion.question;
         } else {
             document.getElementById('cardQuestion').textContent = "No questions available.";
         }
     }
 
-    // Event listeners for buttons
-    document.getElementById('nextTurnBtn').addEventListener('click', showNextQuestion);
-
+    document.getElementById('nextTurnBtn').addEventListener('click', nextTurn);
     document.getElementById('endGameBtn').addEventListener('click', () => {
         document.getElementById('endGamePopup').classList.remove('hidden');
     });
@@ -74,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('endGamePopup').classList.add('hidden');
     });
 
-    // Load questions and turn order on page load
     loadQuestions();
-    updateTurnOrder();
+    initializeTurnOrder();
 });
