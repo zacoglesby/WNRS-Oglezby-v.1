@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We Are Not Really Strangers</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        #game-container { display: none; }
+        button { padding: 15px; margin: 10px; font-size: 18px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div id="intro">
+        <h1>Welcome to We Are Not Really Strangers</h1>
+        <button onclick="startGame()">Click Here To Start</button>
+    </div>
+
+    <div id="game-container">
+        <h2>Select a Deck</h2>
+        <select id="deck-select"></select>
+        <button onclick="playTraditional()">Traditional Mode</button>
+        <button onclick="playRandom()">Randomize Mode</button>
+        <p id="card-output"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
