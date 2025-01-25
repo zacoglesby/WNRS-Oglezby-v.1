@@ -83,3 +83,8 @@ document.getElementById('confirmStart').addEventListener('click', function () {
 document.getElementById('cancelStart').addEventListener('click', function () {
     document.getElementById('confirmationPopup').classList.add('hidden');
 });
+
+// Start button on landing page
+document.getElementById("startButton").addEventListener("click", function() {
+    window.location.href = "main.html";  // Redirect to main page
+});
