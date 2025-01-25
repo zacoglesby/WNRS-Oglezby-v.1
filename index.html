@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +8,11 @@
         body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
         #game-container { display: none; }
         button { padding: 15px; margin: 10px; font-size: 18px; cursor: pointer; }
+        .game-title { font-size: 24px; font-weight: bold; margin-bottom: 20px; }
+        .card-container { display: flex; flex-direction: column; align-items: center; }
+        .red-card { background: red; color: white; padding: 20px; font-size: 20px; width: 50%; }
+        .white-card { background: white; color: black; padding: 20px; font-size: 20px; width: 50%; border: 1px solid black; }
+        .turn-order { text-align: left; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -18,11 +22,35 @@
     </div>
 
     <div id="game-container">
-        <h2>Select a Deck</h2>
+        <div class="game-title">We Are Not Really Strangers</div>
+
+        <label for="deck-select">Select A Deck:</label>
         <select id="deck-select"></select>
+
+        <h3>Game Modes</h3>
         <button onclick="playTraditional()">Traditional Mode</button>
         <button onclick="playRandom()">Randomize Mode</button>
-        <p id="card-output"></p>
+        <button onclick="playCustom()">Custom Mode</button>
+
+        <h3>How Many Players?</h3>
+        <input type="number" id="player-count" min="2" max="10" placeholder="Enter number of players" onchange="setupPlayers()">
+        <div id="player-names"></div>
+
+        <div class="turn-order" id="turn-order"></div>
+
+        <div class="card-container">
+            <div class="red-card" id="card-level">Question Level</div>
+            <div class="white-card" id="card-question">Question will appear here</div>
+        </div>
+
+        <button onclick="nextTurn()">Completed - Next Turn</button>
+        <button onclick="confirmEndGame()">End Game</button>
+
+        <div id="end-game-popup" style="display: none;">
+            <p>Are you sure?</p>
+            <button onclick="endGame()">Yes</button>
+            <button onclick="cancelEndGame()">No, Cancel</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
