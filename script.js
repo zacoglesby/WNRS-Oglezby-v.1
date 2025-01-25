@@ -1,5 +1,5 @@
-const sheetId = 'YOUR_GOOGLE_SHEET_ID';
-const apiKey = 'YOUR_GOOGLE_API_KEY';
+const sheetId = '1FE3h7OaeX7eZtTEE5-8uQe3yFNaKtHsN-itlOUUa5FA/edit?gid=0#gid=0';
+const apiKey = 'AIzaSyC8tdrYfi3zAu6A5cLrUd3xNUG4jxTdcn0';
 
 async function fetchDecks() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Card Decks?key=${apiKey}`;
