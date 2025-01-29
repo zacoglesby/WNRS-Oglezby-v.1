@@ -10,140 +10,111 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log("Start button clicked!");
             window.location.href = "main.html";
         });
-        return; // Stop further execution for index.html
+        return;
     }
 
     /** ============================
-     *  GAMEPLAY.HTML - GAME SCREEN
+     *  MAIN.HTML - GAME SETUP PAGE
      *  ============================ */
-    const gameTitle = document.getElementById('gameTitle');
-    if (!gameTitle) return;
+    const selectDeck = document.getElementById('deckSelect');
+    const playerCountInput = document.getElementById('playerCount');
+    const playerInputsContainer = document.getElementById('playerInputs');
+    let selectedMode = "";
+    let playerNames = [];
 
-    console.log("Gameplay page detected!");
+    if (selectDeck) {
+        console.log("Main page detected. Fetching decks...");
 
-    /** === Retrieve URL parameters === **/
-    const urlParams = new URLSearchParams(window.location.search);
-    const selectedDeck = urlParams.get('deck');
-    const gameMode = urlParams.get('mode');
-    const players = JSON.parse(decodeURIComponent(urlParams.get('players') || "[]"));
+        async function loadDecks() {
+            const SHEET_ID = '1FE3h7OaeX7eZtTEE5-8uQe3yFNaKtHsN-itlOUUa5FA';
+            const API_KEY = 'AIzaSyC8tdrYfi3zAu6A5cLrUd3xNUG4jxTdcn0';
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}?fields=sheets(properties(title))&key=${API_KEY}`;
 
-    console.log("Selected Deck:", selectedDeck);
-    console.log("Game Mode:", gameMode);
-    console.log("Players:", players);
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                console.log("Fetched deck data:", data);
 
-    /** === Update game title === **/
-    gameTitle.textContent = `We Are Not Really Strangers (${selectedDeck}) - (${gameMode})`;
-
-    /** === Variables === **/
-    let currentTurnIndex = 0;
-    let shuffledPlayers = [...players].sort(() => Math.random() - 0.5);
-    let questions = [];
-
-    /** ============================
-     *  UPDATE TURN DISPLAY
-     *  ============================ */
-    function updateCurrentTurn() {
-        if (shuffledPlayers.length > 0) {
-            const currentPlayer = shuffledPlayers[currentTurnIndex % shuffledPlayers.length];
-            const currentPlayerElement = document.getElementById('currentPlayer');
-
-            if (currentPlayerElement) {
-                currentPlayerElement.textContent = `Current Turn: ${currentPlayer}`;
-                currentPlayerElement.style.textAlign = "center"; // Centering the text
-                currentPlayerElement.style.fontSize = "1.5em";  // Make it stand out
-                currentPlayerElement.style.fontWeight = "bold"; // Make it bold
+                if (data.sheets) {
+                    selectDeck.innerHTML = `<option value="" disabled selected>Select a deck</option>`;
+                    data.sheets.forEach(sheet => {
+                        let option = document.createElement('option');
+                        option.value = sheet.properties.title;
+                        option.textContent = sheet.properties.title;
+                        selectDeck.appendChild(option);
+                    });
+                } else {
+                    console.error("No decks found.");
+                }
+            } catch (error) {
+                console.error("Error fetching decks:", error);
             }
-        } else {
-            console.error("No players found!");
-            document.getElementById('currentPlayer').textContent = "No players available.";
         }
+        loadDecks();
     }
 
     /** ============================
-     *  FETCH QUESTIONS FROM GOOGLE SHEETS
+     *  HANDLE PLAYER INPUT FIELDS
      *  ============================ */
-    async function loadQuestions() {
-        const SHEET_ID = '1FE3h7OaeX7eZtTEE5-8uQe3yFNaKtHsN-itlOUUa5FA';
-        const API_KEY = 'AIzaSyC8tdrYfi3zAu6A5cLrUd3xNUG4jxTdcn0';
-        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values:batchGet?ranges=${selectedDeck}!A2:B&key=${API_KEY}`;
+    if (playerCountInput) {
+        playerCountInput.addEventListener('input', function () {
+            const playerCount = parseInt(this.value);
+            playerInputsContainer.innerHTML = "";
 
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-
-            if (data.valueRanges && data.valueRanges[0].values.length > 0) {
-                questions = data.valueRanges[0].values.map(row => ({
-                    level: row[0],
-                    question: row[1]
-                }));
-                console.log("Questions loaded:", questions);
-                showNextQuestion(); // Load first question
-            } else {
-                console.error("No questions found.");
-                document.getElementById('cardQuestion').textContent = "No questions found.";
+            if (playerCount >= 2 && playerCount <= 6) {
+                playerNames = [];
+                for (let i = 1; i <= playerCount; i++) {
+                    let input = document.createElement('input');
+                    input.type = "text";
+                    input.placeholder = `Player ${i} Name`;
+                    input.required = true;
+                    input.addEventListener("input", function () {
+                        playerNames[i - 1] = this.value.trim();
+                    });
+                    playerInputsContainer.appendChild(input);
+                }
             }
-        } catch (error) {
-            console.error("Error fetching questions:", error);
-            document.getElementById('cardQuestion').textContent = "Failed to load questions.";
-        }
+        });
     }
 
     /** ============================
-     *  SHOW NEXT QUESTION (SEQUENTIAL)
+     *  GAME MODE SELECTION
      *  ============================ */
-    function showNextQuestion() {
-        if (questions.length > 0) {
-            const currentQuestion = questions[currentTurnIndex % questions.length];
-            document.getElementById('cardLevel').textContent = `Level ${currentQuestion.level}`;
-            document.getElementById('cardQuestion').textContent = currentQuestion.question;
-        } else {
-            document.getElementById('cardQuestion').textContent = "No questions available.";
+    document.getElementById('traditionalMode')?.addEventListener('click', () => {
+        selectedMode = "Traditional Mode";
+        alert("You selected Traditional Mode");
+    });
+
+    document.getElementById('randomizedMode')?.addEventListener('click', () => {
+        selectedMode = "Randomized Mode";
+        alert("You selected Randomized Mode");
+    });
+
+    /** ============================
+     *  START GAME BUTTON FUNCTIONALITY
+     *  ============================ */
+    document.getElementById('startGameBtn')?.addEventListener('click', function () {
+        const deckChoice = selectDeck.value;
+        if (!deckChoice || playerNames.length === 0 || selectedMode === '') {
+            alert('Please complete all selections!');
+            return;
         }
-    }
 
-    /** ============================
-     *  SHOW RANDOM QUESTION
-     *  ============================ */
-    function showRandomQuestion() {
-        if (questions.length > 0) {
-            const randomIndex = Math.floor(Math.random() * questions.length);
-            const currentQuestion = questions[randomIndex];
-            document.getElementById('cardLevel').textContent = `Level ${currentQuestion.level}`;
-            document.getElementById('cardQuestion').textContent = currentQuestion.question;
-        } else {
-            document.getElementById('cardQuestion').textContent = "No questions available.";
-        }
-    }
+        document.getElementById('confirmationPopup').classList.remove('hidden');
+        document.getElementById('confirmDetails').innerHTML = `
+            <strong>Deck:</strong> ${deckChoice} <br>
+            <strong>Mode:</strong> ${selectedMode} <br>
+            <strong>Players:</strong> ${playerNames.join(', ')}
+        `;
 
-    /** ============================
-     *  BUTTON EVENT LISTENERS
-     *  ============================ */
-    document.getElementById('nextTurnBtn')?.addEventListener('click', function () {
-        currentTurnIndex++;
-        updateCurrentTurn();
-        showNextQuestion();
+        document.getElementById('confirmStart')?.addEventListener('click', function () {
+            const queryString = `gameplay.html?deck=${encodeURIComponent(deckChoice)}&mode=${encodeURIComponent(selectedMode)}&players=${encodeURIComponent(JSON.stringify(playerNames))}`;
+            window.location.href = queryString;
+        });
     });
 
-    document.getElementById('randomQuestionBtn')?.addEventListener('click', function () {
-        showRandomQuestion();
+    document.getElementById('cancelStart')?.addEventListener('click', function () {
+        document.getElementById('confirmationPopup').classList.add('hidden');
     });
-
-    document.getElementById('endGameBtn')?.addEventListener('click', function () {
-        document.getElementById('endGamePopup').classList.remove('hidden');
-    });
-
-    document.getElementById('confirmEndGame')?.addEventListener('click', function () {
-        window.location.href = "index.html";
-    });
-
-    document.getElementById('cancelEndGame')?.addEventListener('click', function () {
-        document.getElementById('endGamePopup').classList.add('hidden');
-    });
-
-    /** ============================
-     *  INITIALIZATION
-     *  ============================ */
-    updateCurrentTurn();
-    loadQuestions();
 });
 
