@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         return; // Stops further script execution on index.html
     }
-});
 
-
-document.addEventListener('DOMContentLoaded', function () {
+    /** ============================
+     *  GAMEPLAY.HTML - GAME SCREEN
+     *  ============================ */
     const gameTitle = document.getElementById('gameTitle');
     if (!gameTitle) return;
 
@@ -28,6 +28,9 @@ document.addEventListener('DOMContentLoaded', function () {
     let shuffledPlayers = [...players].sort(() => Math.random() - 0.5);
     let questions = [];
 
+    /** ============================
+     *  UPDATE TURN DISPLAY
+     *  ============================ */
     function updateCurrentTurn() {
         const currentPlayer = shuffledPlayers[currentTurnIndex % shuffledPlayers.length];
         const currentPlayerElement = document.getElementById('currentPlayer');
@@ -40,17 +43,20 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    /** ============================
+     *  FETCH QUESTIONS FROM GOOGLE SHEETS
+     *  ============================ */
     async function loadQuestions() {
         const SHEET_ID = '1FE3h7OaeX7eZtTEE5-8uQe3yFNaKtHsN-itlOUUa5FA';
         const API_KEY = 'AIzaSyC8tdrYfi3zAu6A5cLrUd3xNUG4jxTdcn0';
-        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${selectedDeck}!A2:B?key=${API_KEY}`;
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values:batchGet?ranges=${selectedDeck}!A2:B&key=${API_KEY}`;
 
         try {
             const response = await fetch(url);
             const data = await response.json();
 
-            if (data.values && data.values.length > 0) {
-                questions = data.values.map(row => ({
+            if (data.valueRanges && data.valueRanges[0].values.length > 0) {
+                questions = data.valueRanges[0].values.map(row => ({
                     level: row[0],
                     question: row[1]
                 }));
@@ -64,6 +70,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    /** ============================
+     *  SHOW NEXT QUESTION (SEQUENTIAL)
+     *  ============================ */
     function showNextQuestion() {
         if (questions.length > 0) {
             const currentQuestion = questions[currentTurnIndex % questions.length];
@@ -74,6 +83,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    /** ============================
+     *  SHOW RANDOM QUESTION
+     *  ============================ */
     function showRandomQuestion() {
         if (questions.length > 0) {
             const randomIndex = Math.floor(Math.random() * questions.length);
@@ -85,28 +97,34 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    document.getElementById('nextTurnBtn').addEventListener('click', function () {
+    /** ============================
+     *  BUTTON EVENT LISTENERS
+     *  ============================ */
+    document.getElementById('nextTurnBtn')?.addEventListener('click', function () {
         currentTurnIndex++;
         updateCurrentTurn();
         showNextQuestion();
     });
 
-    document.getElementById('randomQuestionBtn').addEventListener('click', function () {
+    document.getElementById('randomQuestionBtn')?.addEventListener('click', function () {
         showRandomQuestion();
     });
 
-    document.getElementById('endGameBtn').addEventListener('click', function () {
+    document.getElementById('endGameBtn')?.addEventListener('click', function () {
         document.getElementById('endGamePopup').classList.remove('hidden');
     });
 
-    document.getElementById('confirmEndGame').addEventListener('click', function () {
+    document.getElementById('confirmEndGame')?.addEventListener('click', function () {
         window.location.href = "index.html";
     });
 
-    document.getElementById('cancelEndGame').addEventListener('click', function () {
+    document.getElementById('cancelEndGame')?.addEventListener('click', function () {
         document.getElementById('endGamePopup').classList.add('hidden');
     });
 
+    /** ============================
+     *  INITIALIZATION
+     *  ============================ */
     updateCurrentTurn();
     loadQuestions();
 });

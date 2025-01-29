@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>We Are Not Really Strangers</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <h1>Welcome to We Are Not Really Strangers!</h1>
-        <button id="startButton">Click Here to Start</button>
+        <div class="button-wrapper">
+            <button id="startButton" aria-label="Click to start the game">Click Here to Start</button>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Ensure the script loads after the page -->
+    <script src="script.js" defer></script>
 </body>
 </html>
-
 
 
 
