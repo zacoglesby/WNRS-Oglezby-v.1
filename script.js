@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', function () {
      *  ============================ */
     const startButton = document.getElementById("startButton");
     if (startButton) {
-        startButton.addEventListener("click", function() {
+        startButton.addEventListener("click", function () {
             window.location.href = "main.html";  // Redirect to main page
         });
-        return; // Stop execution for index.html
+        return; // Stop further execution if on index.html
     }
 
     /** ============================
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const SHEET_ID = '1FE3h7OaeX7eZtTEE5-8uQe3yFNaKtHsN-itlOUUa5FA';
                 const API_KEY = 'AIzaSyC8tdrYfi3zAu6A5cLrUd3xNUG4jxTdcn0';
                 const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}?fields=sheets(properties(title))&key=${API_KEY}`;
-                
+
                 const response = await fetch(url);
                 const data = await response.json();
 
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     let input = document.createElement('input');
                     input.type = 'text';
                     input.placeholder = `Player ${i} Name`;
-                    input.addEventListener('input', function() {
+                    input.addEventListener('input', function () {
                         playerNames[i - 1] = this.value.trim();
                     });
                     playerInputs.appendChild(input);
@@ -111,8 +111,9 @@ document.addEventListener('DOMContentLoaded', function () {
     /** ============================
      *  GAMEPLAY.HTML - GAME SCREEN
      *  ============================ */
-    if (!document.getElementById('gameTitle')) {
-        return; // Stop script if not on gameplay.html
+    const gameTitle = document.getElementById('gameTitle');
+    if (!gameTitle) {
+        return; // Stop execution if not on gameplay.html
     }
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -120,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const gameMode = urlParams.get('mode');
     const players = JSON.parse(decodeURIComponent(urlParams.get('players') || "[]"));
 
-    document.getElementById('gameTitle').textContent = `We Are Not Really Strangers (${selectedDeck}) - (${gameMode})`;
+    gameTitle.textContent = `We Are Not Really Strangers (${selectedDeck}) - (${gameMode})`;
 
     let currentTurnIndex = 0;
     let shuffledPlayers = players.sort(() => Math.random() - 0.5);
