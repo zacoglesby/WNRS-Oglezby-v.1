@@ -68,12 +68,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('traditionalMode')?.addEventListener('click', () => {
         selectedMode = 'Traditional Mode';
-        alert('You selected Traditional Mode');
     });
 
     document.getElementById('randomizedMode')?.addEventListener('click', () => {
         selectedMode = 'Randomized Mode';
-        alert('You selected Randomized Mode');
     });
 
     if (document.getElementById('startGameBtn')) {
@@ -98,16 +96,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    document.getElementById('cancelStart')?.addEventListener('click', function () {
-        document.getElementById('confirmationPopup').classList.add('hidden');
-    });
-
     /** ============================
      *  GAMEPLAY.HTML - GAME SCREEN
      *  ============================ */
     const gameTitle = document.getElementById('gameTitle');
     if (!gameTitle) {
-        return; // Stop execution if not on gameplay.html
+        return;
     }
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -150,13 +144,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showNextQuestion() {
-        if (questions.length > 0) {
-            const currentQuestion = questions[currentTurnIndex % questions.length];
-            document.getElementById('cardLevel').textContent = `Level ${currentQuestion.level}`;
-            document.getElementById('cardQuestion').textContent = currentQuestion.question;
-        } else {
-            document.getElementById('cardQuestion').textContent = "No questions available.";
-        }
+        const currentQuestion = questions[currentTurnIndex % questions.length];
+        document.getElementById('cardLevel').textContent = `Level ${currentQuestion.level}`;
+        document.getElementById('cardQuestion').textContent = currentQuestion.question;
     }
 
     document.getElementById('nextTurnBtn')?.addEventListener('click', function () {
@@ -165,18 +155,11 @@ document.addEventListener('DOMContentLoaded', function () {
         showNextQuestion();
     });
 
-    document.getElementById('endGameBtn')?.addEventListener('click', function () {
-        document.getElementById('endGamePopup').classList.remove('hidden');
-    });
-
     document.getElementById('confirmEndGame')?.addEventListener('click', function () {
         window.location.href = "index.html";
-    });
-
-    document.getElementById('cancelEndGame')?.addEventListener('click', function () {
-        document.getElementById('endGamePopup').classList.add('hidden');
     });
 
     updateCurrentTurn();
     loadQuestions();
 });
+
