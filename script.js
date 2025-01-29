@@ -15,13 +15,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateCurrentTurn() {
         const currentPlayer = shuffledPlayers[currentTurnIndex % shuffledPlayers.length];
-        document.getElementById('currentPlayer').textContent = `Current Turn: ${currentPlayer}`;
+        const currentPlayerElement = document.getElementById('currentPlayer');
+
+        if (currentPlayerElement) {
+            currentPlayerElement.textContent = `Current Turn: ${currentPlayer}`;
+            currentPlayerElement.style.textAlign = "center";  // Centering the text
+        }
     }
 
     async function loadQuestions() {
         const SHEET_ID = '1FE3h7OaeX7eZtTEE5-8uQe3yFNaKtHsN-itlOUUa5FA';
         const API_KEY = 'AIzaSyC8tdrYfi3zAu6A5cLrUd3xNUG4jxTdcn0';
-        const url = `https://sheets.googleapis.com/v4/spreadsheets/${selectedDeck}!A2:B?key=${API_KEY}`;
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${selectedDeck}!A2:B?key=${API_KEY}`;
 
         try {
             const response = await fetch(url);
