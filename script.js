@@ -1,4 +1,19 @@
 document.addEventListener('DOMContentLoaded', function () {
+    /** ============================
+     *  INDEX.HTML - LANDING PAGE
+     *  ============================ */
+    const startButton = document.getElementById("startButton");
+    
+    if (startButton) {
+        startButton.addEventListener("click", function () {
+            window.location.href = "main.html";  // Redirect to main page
+        });
+        return; // Stops further script execution on index.html
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
     const gameTitle = document.getElementById('gameTitle');
     if (!gameTitle) return;
 
