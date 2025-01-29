@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
         startButton.addEventListener("click", function() {
             window.location.href = "main.html";  // Redirect to main page
         });
+        return; // Stop execution for index.html
     }
 
     /** ============================
@@ -65,58 +66,68 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    document.getElementById('traditionalMode')?.addEventListener('click', () => {
-        selectedMode = 'Traditional Mode';
-        alert('You selected Traditional Mode');
-    });
-
-    document.getElementById('randomizedMode')?.addEventListener('click', () => {
-        selectedMode = 'Randomized Mode';
-        alert('You selected Randomized Mode');
-    });
-
-    document.getElementById('startGameBtn')?.addEventListener('click', function () {
-        const deckChoice = selectDeck.value;
-        if (!deckChoice || playerNames.length === 0 || selectedMode === '') {
-            alert('Please complete all selections!');
-            return;
-        }
-
-        document.getElementById('confirmationPopup').classList.remove('hidden');
-        document.getElementById('confirmDetails').innerHTML = `
-            <strong>Deck:</strong> ${deckChoice} <br>
-            <strong>Mode:</strong> ${selectedMode} <br>
-            <strong>Players:</strong> ${playerNames.join(', ')}
-        `;
-
-        document.getElementById('confirmStart').addEventListener('click', function () {
-            const queryString = `gameplay.html?deck=${encodeURIComponent(deckChoice)}&mode=${encodeURIComponent(selectedMode)}&players=${encodeURIComponent(JSON.stringify(playerNames))}`;
-            window.location.href = queryString;
+    if (document.getElementById('traditionalMode')) {
+        document.getElementById('traditionalMode').addEventListener('click', () => {
+            selectedMode = 'Traditional Mode';
+            alert('You selected Traditional Mode');
         });
-    });
+    }
 
-    document.getElementById('cancelStart')?.addEventListener('click', function () {
-        document.getElementById('confirmationPopup').classList.add('hidden');
-    });
+    if (document.getElementById('randomizedMode')) {
+        document.getElementById('randomizedMode').addEventListener('click', () => {
+            selectedMode = 'Randomized Mode';
+            alert('You selected Randomized Mode');
+        });
+    }
+
+    if (document.getElementById('startGameBtn')) {
+        document.getElementById('startGameBtn').addEventListener('click', function () {
+            const deckChoice = selectDeck.value;
+            if (!deckChoice || playerNames.length === 0 || selectedMode === '') {
+                alert('Please complete all selections!');
+                return;
+            }
+
+            document.getElementById('confirmationPopup').classList.remove('hidden');
+            document.getElementById('confirmDetails').innerHTML = `
+                <strong>Deck:</strong> ${deckChoice} <br>
+                <strong>Mode:</strong> ${selectedMode} <br>
+                <strong>Players:</strong> ${playerNames.join(', ')}
+            `;
+
+            document.getElementById('confirmStart').addEventListener('click', function () {
+                const queryString = `gameplay.html?deck=${encodeURIComponent(deckChoice)}&mode=${encodeURIComponent(selectedMode)}&players=${encodeURIComponent(JSON.stringify(playerNames))}`;
+                window.location.href = queryString;
+            });
+        });
+    }
+
+    if (document.getElementById('cancelStart')) {
+        document.getElementById('cancelStart').addEventListener('click', function () {
+            document.getElementById('confirmationPopup').classList.add('hidden');
+        });
+    }
 
     /** ============================
      *  GAMEPLAY.HTML - GAME SCREEN
      *  ============================ */
+    if (!document.getElementById('gameTitle')) {
+        return; // Stop script if not on gameplay.html
+    }
+
     const urlParams = new URLSearchParams(window.location.search);
     const selectedDeck = urlParams.get('deck');
     const gameMode = urlParams.get('mode');
     const players = JSON.parse(decodeURIComponent(urlParams.get('players') || "[]"));
 
-    if (document.getElementById('gameTitle')) {
-        document.getElementById('gameTitle').textContent = `We Are Not Really Strangers (${selectedDeck}) - (${gameMode})`;
-    }
+    document.getElementById('gameTitle').textContent = `We Are Not Really Strangers (${selectedDeck}) - (${gameMode})`;
 
     let currentTurnIndex = 0;
     let shuffledPlayers = players.sort(() => Math.random() - 0.5);
 
     function updateCurrentTurn() {
         const currentPlayer = shuffledPlayers[currentTurnIndex % shuffledPlayers.length];
-        document.getElementById('currentPlayer').textContent = currentPlayer;
+        document.getElementById('currentPlayer').textContent = `Current Turn: ${currentPlayer}`;
     }
 
     async function loadQuestions() {
@@ -171,9 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('endGamePopup').classList.add('hidden');
     });
 
-    if (document.getElementById('gameTitle')) {
-        updateCurrentTurn();
-        loadQuestions();
-    }
+    updateCurrentTurn();
+    loadQuestions();
 });
 
