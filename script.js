@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+    console.log("Script loaded successfully!");
+
     /** ============================
      *  INDEX.HTML - LANDING PAGE
      *  ============================ */
@@ -6,16 +8,19 @@ document.addEventListener('DOMContentLoaded', function () {
     
     if (startButton) {
         startButton.addEventListener("click", function () {
-            window.location.href = "main.html";  // Redirect to main page
+            console.log("Start button clicked!");
+            window.location.href = "main.html";
         });
-        return; // Stops further script execution on index.html
+        return; // Stop execution for index.html
     }
 
     /** ============================
-     *  GAMEPLAY.HTML - GAME SCREEN
+     *  MAIN.HTML - GAME SETUP PAGE
      *  ============================ */
     const gameTitle = document.getElementById('gameTitle');
     if (!gameTitle) return;
+
+    console.log("Loading gameplay setup...");
 
     const urlParams = new URLSearchParams(window.location.search);
     const selectedDeck = urlParams.get('deck');
@@ -49,14 +54,14 @@ document.addEventListener('DOMContentLoaded', function () {
     async function loadQuestions() {
         const SHEET_ID = '1FE3h7OaeX7eZtTEE5-8uQe3yFNaKtHsN-itlOUUa5FA';
         const API_KEY = 'AIzaSyC8tdrYfi3zAu6A5cLrUd3xNUG4jxTdcn0';
-        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values:batchGet?ranges=${selectedDeck}!A2:B&key=${API_KEY}`;
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${selectedDeck}!A2:B?key=${API_KEY}`;
 
         try {
             const response = await fetch(url);
             const data = await response.json();
 
-            if (data.valueRanges && data.valueRanges[0].values.length > 0) {
-                questions = data.valueRanges[0].values.map(row => ({
+            if (data.values && data.values.length > 0) {
+                questions = data.values.map(row => ({
                     level: row[0],
                     question: row[1]
                 }));
@@ -101,24 +106,29 @@ document.addEventListener('DOMContentLoaded', function () {
      *  BUTTON EVENT LISTENERS
      *  ============================ */
     document.getElementById('nextTurnBtn')?.addEventListener('click', function () {
+        console.log("Next Turn clicked");
         currentTurnIndex++;
         updateCurrentTurn();
         showNextQuestion();
     });
 
     document.getElementById('randomQuestionBtn')?.addEventListener('click', function () {
+        console.log("Randomize Question clicked");
         showRandomQuestion();
     });
 
     document.getElementById('endGameBtn')?.addEventListener('click', function () {
+        console.log("End Game clicked");
         document.getElementById('endGamePopup').classList.remove('hidden');
     });
 
     document.getElementById('confirmEndGame')?.addEventListener('click', function () {
+        console.log("Confirmed End Game");
         window.location.href = "index.html";
     });
 
     document.getElementById('cancelEndGame')?.addEventListener('click', function () {
+        console.log("Cancelled End Game");
         document.getElementById('endGamePopup').classList.add('hidden');
     });
 
