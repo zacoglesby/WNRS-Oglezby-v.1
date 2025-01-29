@@ -1,124 +1,22 @@
-/* General Styles */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f8f8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+/* Ensure the "Current Turn" is centered properly */
+.turn-order-container {
     text-align: center;
-}
-
-/* Container Styling */
-.container, .gameplay-container {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
-    width: 90%;
-}
-
-h1 {
-    color: #333;
-}
-
-label {
-    font-size: 1.2em;
-    display: block;
-    margin: 10px 0 5px;
-}
-
-/* Form Elements */
-select, input, button {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    font-size: 1em;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-input:focus, button:focus {
-    outline: 2px solid #3498db;
-}
-
-/* Title Box */
-.title-box {
-    font-size: 1.5em;
-    font-weight: bold;
-    padding: 10px;
-    border: 2px solid #ff5a5f;
-    background-color: #ff5a5f;
-    color: white;
-    border-radius: 10px;
     margin-bottom: 20px;
 }
 
-/* Turn Order Panel */
-.turn-order-container, .turn-order {
-    text-align: left;
-    background-color: #f0f0f0;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 250px;
-    margin-bottom: 20px;
-}
-
-.turn-order-container h3 {
-    color: #ff5a5f;
+#currentPlayer {
     text-align: center;
-}
-
-.turn-order-container ul, .turn-order ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.turn-order-container li, .turn-order li {
-    font-size: 1.2em;
-    margin: 5px 0;
-}
-
-/* Card Section */
-.card-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px 0;
-}
-
-.card-level {
-    width: 80%;
-    padding: 20px;
-    background-color: #ff5a5f;
-    color: white;
     font-size: 1.5em;
     font-weight: bold;
-    border-radius: 10px 10px 0 0;
-    text-transform: uppercase;
+    margin-top: 10px;
 }
 
-.card-question {
-    width: 80%;
-    padding: 40px;
-    background-color: white;
-    font-size: 1.5em;
-    border: 2px solid #ff5a5f;
-    border-radius: 0 0 10px 10px;
-    color: #333;
-}
-
-/* Buttons */
+/* Make the buttons align properly */
 .controls {
-    margin-top: 20px;
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 15px;
+    margin-top: 20px;
 }
 
 .controls button {
@@ -134,41 +32,17 @@ input:focus, button:focus {
     color: white;
 }
 
-#endGameBtn, #startGameBtn {
+#randomQuestionBtn {
+    background-color: #f1c40f;
+    color: white;
+}
+
+#endGameBtn {
     background-color: #e74c3c;
     color: white;
 }
 
-#startGameBtn:hover {
-    background-color: #27ae60;
-}
-
-/* Game Modes Section */
-.game-modes button {
-    width: 48%;
-    margin-right: 2%;
-    padding: 15px;
-    font-size: 1em;
-    cursor: pointer;
-    border: none;
-    border-radius: 10px;
-}
-
-.game-modes button:nth-child(2) {
-    margin-right: 0;
-}
-
-#traditionalMode {
-    background-color: #ff5a5f;
-    color: white;
-}
-
-#randomizedMode {
-    background-color: #3498db;
-    color: white;
-}
-
-/* Popup */
+/* Ensure the End Game popup is centered */
 .popup {
     position: fixed;
     top: 0;
@@ -187,23 +61,6 @@ input:focus, button:focus {
     border-radius: 10px;
     text-align: center;
 }
-
-.hidden {
-    display: none;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .gameplay-container {
-        width: 95%;
-    }
-
-    .controls button {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-}
-
 
 
 

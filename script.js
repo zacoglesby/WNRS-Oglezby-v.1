@@ -19,7 +19,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (currentPlayerElement) {
             currentPlayerElement.textContent = `Current Turn: ${currentPlayer}`;
-            currentPlayerElement.style.textAlign = "center";  // Centering the text
+            currentPlayerElement.style.textAlign = "center"; // Centering the text
+            currentPlayerElement.style.fontSize = "1.5em";  // Make it stand out
+            currentPlayerElement.style.fontWeight = "bold"; // Make it bold
         }
     }
 
@@ -68,25 +70,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    document.getElementById('nextTurnBtn')?.addEventListener('click', function () {
+    document.getElementById('nextTurnBtn').addEventListener('click', function () {
         currentTurnIndex++;
         updateCurrentTurn();
         showNextQuestion();
     });
 
-    document.getElementById('randomQuestionBtn')?.addEventListener('click', function () {
+    document.getElementById('randomQuestionBtn').addEventListener('click', function () {
         showRandomQuestion();
     });
 
-    document.getElementById('endGameBtn')?.addEventListener('click', function () {
+    document.getElementById('endGameBtn').addEventListener('click', function () {
         document.getElementById('endGamePopup').classList.remove('hidden');
     });
 
-    document.getElementById('confirmEndGame')?.addEventListener('click', function () {
+    document.getElementById('confirmEndGame').addEventListener('click', function () {
         window.location.href = "index.html";
     });
 
-    document.getElementById('cancelEndGame')?.addEventListener('click', function () {
+    document.getElementById('cancelEndGame').addEventListener('click', function () {
         document.getElementById('endGamePopup').classList.add('hidden');
     });
 
