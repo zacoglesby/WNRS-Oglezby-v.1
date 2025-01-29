@@ -7,17 +7,13 @@ document.addEventListener('DOMContentLoaded', function () {
         startButton.addEventListener("click", function () {
             window.location.href = "main.html";  // Redirect to main page
         });
-        return; // Stop further execution if on index.html
+        return; // Stop execution since this is index.html
     }
 
     /** ============================
      *  MAIN.HTML - GAME SETUP PAGE
      *  ============================ */
     const selectDeck = document.getElementById('deckSelect');
-    const playerCountInput = document.getElementById('playerCount');
-    let selectedMode = '';
-    let playerNames = [];
-
     if (selectDeck) {
         async function loadDecks() {
             try {
@@ -45,6 +41,10 @@ document.addEventListener('DOMContentLoaded', function () {
         loadDecks();
     }
 
+    const playerCountInput = document.getElementById('playerCount');
+    let selectedMode = '';
+    let playerNames = [];
+
     if (playerCountInput) {
         playerCountInput.addEventListener('input', function () {
             let playerCount = parseInt(this.value);
@@ -66,19 +66,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    if (document.getElementById('traditionalMode')) {
-        document.getElementById('traditionalMode').addEventListener('click', () => {
-            selectedMode = 'Traditional Mode';
-            alert('You selected Traditional Mode');
-        });
-    }
+    document.getElementById('traditionalMode')?.addEventListener('click', () => {
+        selectedMode = 'Traditional Mode';
+        alert('You selected Traditional Mode');
+    });
 
-    if (document.getElementById('randomizedMode')) {
-        document.getElementById('randomizedMode').addEventListener('click', () => {
-            selectedMode = 'Randomized Mode';
-            alert('You selected Randomized Mode');
-        });
-    }
+    document.getElementById('randomizedMode')?.addEventListener('click', () => {
+        selectedMode = 'Randomized Mode';
+        alert('You selected Randomized Mode');
+    });
 
     if (document.getElementById('startGameBtn')) {
         document.getElementById('startGameBtn').addEventListener('click', function () {
@@ -102,11 +98,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    if (document.getElementById('cancelStart')) {
-        document.getElementById('cancelStart').addEventListener('click', function () {
-            document.getElementById('confirmationPopup').classList.add('hidden');
-        });
-    }
+    document.getElementById('cancelStart')?.addEventListener('click', function () {
+        document.getElementById('confirmationPopup').classList.add('hidden');
+    });
 
     /** ============================
      *  GAMEPLAY.HTML - GAME SCREEN
@@ -186,4 +180,3 @@ document.addEventListener('DOMContentLoaded', function () {
     updateCurrentTurn();
     loadQuestions();
 });
-
